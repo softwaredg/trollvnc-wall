@@ -19,7 +19,7 @@ final class RootStreamSession: NSObject, ConnectChecker {
     func start(host: String, deviceId: String, token: String, name: String) {
         stop()
         _ = name
-        onLog?("采屏推流（无相机）")
+        onLog?("窗口快照推流（无相机）")
         DispatchQueue.main.async {
             self.begin(host: host, deviceId: deviceId, token: token)
         }
