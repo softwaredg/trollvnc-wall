@@ -68,14 +68,15 @@ func (d *Device) StreamOnline() bool {
 }
 
 func (d *Device) UIStateLocked() UIState {
-	// 有推流即可上墙；ctrl 仅影响切 HD（无 ctrl 时保持 preview）
-	if !(d.MTXPublisherUp && d.TSPullHealthy) {
+	// 有 MTX publisher 即可上墙开播；tsPullHealthy 由拉流成功后置真，不可作开播门槛（否则永不开播）
+	// ctrl 仅影响切 HD；无 ctrl 时保持 preview
+	if !d.MTXPublisherUp {
 		return Offline
 	}
 	if d.IsSwitching {
 		return Switching
 	}
-	if d.Mode == "hd" {
+	if d.Mode == "hd" && d.TSPullHealthy {
 		return HD
 	}
 	return Preview

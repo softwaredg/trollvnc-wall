@@ -39,8 +39,9 @@ Codec：**H.264**。墙端容器：**HTTP-TS + mpegts.js**。
 ## 三态与 UI 四态
 
 - `ctrlOnline` / `mtxPublisherUp` / `tsPullHealthy`
-- `streamOnline = mtxPublisherUp ∧ tsPullHealthy`
-- UI：`offline` | `preview` | `switching` | `hd`（可用需 ctrl∧stream）
+- `streamOnline = mtxPublisherUp ∧ tsPullHealthy`（HD 门槛）
+- UI：`offline`（无 publisher）| `preview`（有 publisher，可先开播）| `switching` | `hd`（需 ts 健康）
+- 前端在 `mtxPublisherUp` 时即拉 HTTP-TS；`tsPullHealthy` 由首包置真，禁止当作开播门槛（否则死锁）
 
 撕裂：
 

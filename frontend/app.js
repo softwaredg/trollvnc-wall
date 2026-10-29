@@ -131,7 +131,8 @@ async function stopPlay(st) {
 async function startPlay(st) {
   if (!pageVisible) return;
   const snap = st.snap;
-  if (snap.uiState === "offline" || !snap.streamOnline) {
+  // mtx 上线即可拉 TS；勿等 streamOnline（=mtx∧ts），否则 ts 永远无法被置真
+  if (snap.uiState === "offline" || !snap.mtxPublisherUp) {
     await stopPlay(st);
     return;
   }
@@ -202,6 +203,10 @@ function renderSnap(snap) {
   } else if (snap.uiState === "switching") {
     mask.hidden = false;
     mask.textContent = "切换中…";
+    startPlay(st);
+  } else if (!snap.tsPullHealthy) {
+    mask.hidden = false;
+    mask.textContent = "拉流中…";
     startPlay(st);
   } else {
     mask.hidden = true;
